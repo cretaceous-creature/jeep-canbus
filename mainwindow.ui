@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>720</width>
-    <height>112</height>
+    <width>722</width>
+    <height>132</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -83,9 +83,16 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="pushButton_open">
+           <property name="text">
+            <string>Open</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="pushButton_start">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="text">
             <string>Start</string>
@@ -94,6 +101,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_stop">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Stop</string>
            </property>
@@ -114,6 +124,9 @@
           <widget class="QLineEdit" name="lineEdit_filename">
            <property name="enabled">
             <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>C:/Users/xlwye/Desktop</string>
            </property>
            <property name="readOnly">
             <bool>true</bool>
@@ -136,6 +149,11 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="toolTip">
+    <string/>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

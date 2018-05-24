@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QDebug>
-#include <QTimer>
+#include <QThread>
 #include <QFileDialog>
 
 #include "candatastorage.h"
@@ -23,10 +23,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    CanDataStorage *storage;
+    CanDataStorage storage;
+    QThread canThread;
 
 private slots:
-    void startCan();
+    void openCan();
+    void clear();
 };
 
 #endif // MAINWINDOW_H
