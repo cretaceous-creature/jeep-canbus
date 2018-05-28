@@ -15,6 +15,7 @@
 #define STATUS_ERR					0
 
 #include <windows.h>
+
 #include <minwindef.h>
 
 typedef  struct  _VCI_BOARD_INFO{

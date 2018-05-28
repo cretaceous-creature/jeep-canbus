@@ -30,12 +30,21 @@ SOURCES += main.cpp \
     candatastorage.cpp
 
 HEADERS  += mainwindow.h \
-    controlcan.h \
     candatastorage.h
 
 FORMS    += mainwindow.ui
 
+win32 {
+HEADERS  += controlcan_win32.h
+
 LIBS += $$PWD/ControlCAN.lib
+}
+
+unix {
+HEADERS  += controlcan_unix.h
+LIBS += $$PWD/libcontrolcan.so
+}
+
 
 TRANSLATIONS = zh_CN.ts
 

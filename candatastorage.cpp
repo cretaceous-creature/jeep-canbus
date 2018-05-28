@@ -44,7 +44,7 @@ void CanDataStorage::open() {
             emit openError();
             return;
         }
-        Sleep(100);
+        QThread::msleep(100);
         if(VCI_InitCAN(m_DevType, m_DevIndex, 0, &InitInfo) != OPENSUCCESS) {
             emit openError();
             return;

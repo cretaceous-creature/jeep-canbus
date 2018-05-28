@@ -7,10 +7,14 @@
 #include <QMessageBox>
 #include <QTime>
 #include <QDebug>
-
+#include <QThread>
 #include <atomic>
 
-#include "ControlCAN.h"
+#ifdef WIN32
+#include "controlcan_win32.h"
+#else
+#include "controlcan_unix.h"
+#endif
 
 
 class CanDataStorage : public QObject
