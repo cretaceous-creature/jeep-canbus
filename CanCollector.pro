@@ -36,7 +36,6 @@ FORMS    += mainwindow.ui
 
 win32 {
 HEADERS  += controlcan_win32.h
-
 LIBS += $$PWD/ControlCAN.lib
 }
 

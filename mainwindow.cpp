@@ -6,10 +6,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    settings = new QSettings("PKU", "CanCollector", this);
+    QString save_path = settings->value("save_path", ".").toString();
+    ui->lineEdit_filename->setText(save_path);
     connect(ui->pushButton_open, &QPushButton::clicked, this, &MainWindow::openCan);
     connect(ui->pushButton_choose, &QPushButton::clicked, [=]() {
         QString folder = QFileDialog::getExistingDirectory(this, tr("Folder to save log"), "C:\\");
         ui->lineEdit_filename->setText(folder);
+        settings->setValue("save_path", folder);
     });
     connect(&storage, &CanDataStorage::openError, this, [=] () {
         ui->statusBar->showMessage("");

@@ -8,6 +8,7 @@
 #include <QTime>
 #include <QDebug>
 #include <QThread>
+
 #include <atomic>
 
 #ifdef WIN32
@@ -15,7 +16,6 @@
 #else
 #include "controlcan_unix.h"
 #endif
-
 
 class CanDataStorage : public QObject
 {

@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QFileDialog>
+#include <QSettings>
 
 #include "candatastorage.h"
 
@@ -25,6 +26,7 @@ private:
     Ui::MainWindow *ui;
     CanDataStorage storage;
     QThread canThread;
+    QSettings *settings;
 
 private slots:
     void openCan();
