@@ -3,16 +3,6 @@
 CanDataStorage::CanDataStorage(QObject *parent)
     : QObject(parent)
 {
-    m_DevIndex = 0;
-    m_DevType = VCI_USBCAN2;
-    Reserved = 0;
-    InitInfo.Timing0 = 0x00; // 03 for jeep. 00 for c4
-    InitInfo.Timing1 = 0x1C;
-    InitInfo.Filter = 0;
-    InitInfo.AccCode = 0x80000008;
-    InitInfo.AccMask = 0xFFFFFFFF;
-    InitInfo.Mode = 1;
-
     canIsOpen = false;
     isRunning = false;
 }
@@ -21,12 +11,11 @@ CanDataStorage::~CanDataStorage() {
     if (isRunning) {
         stop();
     }
-    qDebug() << "Over.";
+    qDebug() << __FUNCTION__;
 }
 
 void CanDataStorage::processData() {
     int len = VCI_Receive(m_DevType, m_DevIndex, 0, receivedata, 2500, 200);
-
     for (int i = 0; i < len; i++) {
         if (receivedata[i].RemoteFlag != 0 || receivedata[i].ExternFlag != 0) {
             continue;
@@ -42,6 +31,15 @@ void CanDataStorage::processData() {
 
 void CanDataStorage::open() {
     if (!canIsOpen) {
+        m_DevIndex = 0;
+        m_DevType = VCI_USBCAN2;
+        Reserved = 0;
+        InitInfo.Timing0 = 0x03; // 03 for jeep. 00 for c4
+        InitInfo.Timing1 = 0x1C;
+        InitInfo.Filter = 0;
+        InitInfo.AccCode = 0x80000000;
+        InitInfo.AccMask = 0xFFFFFFFF;
+        InitInfo.Mode = 1;
         if(VCI_OpenDevice(m_DevType, m_DevIndex, Reserved) != OPENSUCCESS) {
             emit openError();
             return;
@@ -53,20 +51,21 @@ void CanDataStorage::open() {
         }
         canIsOpen = true;
     }
-    qDebug() << "Open.";
+    qDebug() << __FUNCTION__;
     emit openOK();
+    isStoped = false;
 }
 
 void CanDataStorage::start() {
+    qDebug() << __FUNCTION__;
     if (VCI_StartCAN(m_DevType, m_DevIndex, 0) != OPENSUCCESS) {
-        qDebug() << "Open error";
+        qDebug() << "Start error!!!";
         emit startError();
         return;
     }
     emit startOK();
     isRunning = true;
     while (isRunning) {
-        qDebug() << "Running.";
         processData();
     }
     fclose(fp);
@@ -75,12 +74,15 @@ void CanDataStorage::start() {
 
 void CanDataStorage::stop()
 {
+    if (isStoped) return;
     isRunning = false;
     if (VCI_CloseDevice(m_DevType, m_DevIndex) != OPENSUCCESS) {
         emit closeError();
         return;
     }
+    qDebug() << __FUNCTION__;
     emit closeOK();
+    isStoped = true;
 }
 
 void CanDataStorage::save(VCI_CAN_OBJ &data)
@@ -92,6 +94,7 @@ void CanDataStorage::save(VCI_CAN_OBJ &data)
     for (int i = 0; i < data.DataLen; ++i) {
         fprintf(fp, "\t%d", data.Data[i]);
     }
+    fprintf(fp, "\n");
 }
 
 void CanDataStorage::setFilePath(QString path)

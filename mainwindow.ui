@@ -126,7 +126,7 @@
             <bool>true</bool>
            </property>
            <property name="text">
-            <string>C:/Users/xlwye/Desktop</string>
+            <string/>
            </property>
            <property name="readOnly">
             <bool>true</bool>

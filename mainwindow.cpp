@@ -23,29 +23,11 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->statusBar->showMessage("Device is opened.");
         ui->pushButton_open->setEnabled(false);
         ui->pushButton_start->setEnabled(true);
-        ui->pushButton_stop->setEnabled(false);
+        ui->pushButton_stop->setEnabled(true);
     });
-
-}
-
-MainWindow::~MainWindow()
-{
-    clear();
-    delete ui;
-}
-
-void MainWindow::openCan()
-{
-    if (ui->lineEdit_filename->text().isEmpty()) {
-        QMessageBox::warning(this, "Error", "Please choose storage folder.");
-        return;
-    }
-
-    storage.setFilePath(ui->lineEdit_filename->text());
-    storage.open();
     storage.moveToThread(&canThread);
-
     connect(&storage, &CanDataStorage::startError, this, [=] () {
+        qDebug() << "Start error";
         QMessageBox::critical(this, "Error", "Something happend while starting receiving.");
         ui->pushButton_open->setEnabled(true);
         ui->pushButton_start->setEnabled(false);
@@ -68,16 +50,35 @@ void MainWindow::openCan()
         ui->pushButton_open->setEnabled(true);
         ui->pushButton_start->setEnabled(false);
         ui->pushButton_stop->setEnabled(false);
+        clear();
     }, Qt::QueuedConnection);
 
     connect(ui->pushButton_start, &QPushButton::clicked, &storage, &CanDataStorage::start);
     connect(ui->pushButton_stop, &QPushButton::clicked, &storage, &CanDataStorage::stop, Qt::DirectConnection);
+}
+
+MainWindow::~MainWindow()
+{
+    clear();
+    delete ui;
+}
+
+void MainWindow::openCan()
+{
+    if (ui->lineEdit_filename->text().isEmpty()) {
+        QMessageBox::warning(this, "Error", "Please choose storage folder.");
+        return;
+    }
+    qDebug() << __FUNCTION__;
+    storage.setFilePath(ui->lineEdit_filename->text());
+    storage.open();
     canThread.start();
 }
 
 void MainWindow::clear()
 {
     if (canThread.isRunning()) {
+        qDebug() << __FUNCTION__;
         storage.stop();
         canThread.quit();
         canThread.wait();

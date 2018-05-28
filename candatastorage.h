@@ -28,6 +28,7 @@ public:
     unsigned long Reserved;
 
     bool canIsOpen;
+    bool isStoped;
 
     QString filePath;
     FILE *fp;
